@@ -1,6 +1,6 @@
 {
   "name": "onchain-notes-mcp",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "MCP server for Onchain Notes dApp on Base mainnet — create, read, update, and delete notes via AI clients",
   "main": "dist/index.js",
   "bin": {
