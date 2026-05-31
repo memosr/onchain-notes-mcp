@@ -1,0 +1,43 @@
+{
+  "name": "onchain-notes-mcp",
+  "version": "1.0.0",
+  "description": "MCP server for Onchain Notes dApp on Base mainnet — create, read, update, and delete notes via AI clients",
+  "main": "dist/index.js",
+  "bin": {
+    "onchain-notes-mcp": "dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "prepare": "npm run build",
+    "dev": "ts-node src/index.ts"
+  },
+  "keywords": [
+    "mcp",
+    "base",
+    "onchain",
+    "notes",
+    "claude",
+    "ai-agent",
+    "ethereum",
+    "web3"
+  ],
+  "author": "memosr",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/memosr/onchain-notes-mcp.git"
+  },
+  "homepage": "https://onchain-notes.vercel.app",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.12.0",
+    "ethers": "^6.13.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "typescript": "^5.4.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
