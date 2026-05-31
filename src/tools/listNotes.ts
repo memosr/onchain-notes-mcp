@@ -13,10 +13,13 @@ export const listNotesSchema = {
 
 export type NoteResult = {
   id: number;
+  owner: string;
   title: string;
   content: string;
-  timestamp: number;
-  date: string;
+  createdAt: number;
+  updatedAt: number;
+  createdDate: string;
+  updatedDate: string;
 };
 
 export async function listNotes(): Promise<{
@@ -34,10 +37,13 @@ export async function listNotes(): Promise<{
 
   const notes: NoteResult[] = rawNotes.map((note) => ({
     id: Number(note.id),
+    owner: note.owner,
     title: note.title,
     content: note.content,
-    timestamp: Number(note.timestamp),
-    date: new Date(Number(note.timestamp) * 1000).toISOString(),
+    createdAt: Number(note.createdAt),
+    updatedAt: Number(note.updatedAt),
+    createdDate: new Date(Number(note.createdAt) * 1000).toISOString(),
+    updatedDate: new Date(Number(note.updatedAt) * 1000).toISOString(),
   }));
 
   return { notes, count: notes.length };

@@ -22,7 +22,7 @@ export const ABI = [
       { name: "title", type: "string" },
       { name: "content", type: "string" },
     ],
-    outputs: [],
+    outputs: [{ name: "noteId", type: "uint256" }],
   },
   {
     name: "updateNote",
@@ -53,9 +53,11 @@ export const ABI = [
         type: "tuple[]",
         components: [
           { name: "id", type: "uint256" },
+          { name: "owner", type: "address" },
           { name: "title", type: "string" },
           { name: "content", type: "string" },
-          { name: "timestamp", type: "uint256" },
+          { name: "createdAt", type: "uint256" },
+          { name: "updatedAt", type: "uint256" },
         ],
       },
     ],
@@ -64,9 +66,11 @@ export const ABI = [
 
 export type Note = {
   id: bigint;
+  owner: string;
   title: string;
   content: string;
-  timestamp: bigint;
+  createdAt: bigint;
+  updatedAt: bigint;
 };
 
 /** Returns the first responsive RPC provider. */
