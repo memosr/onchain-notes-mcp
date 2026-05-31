@@ -5,23 +5,21 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Base Mainnet](https://img.shields.io/badge/Base-Mainnet-0052FF?logo=base&logoColor=white)](https://base.org)
 
-**MCP server that lets AI agents write, read, and manage onchain notes on Base via natural language.**
+MCP server for reading and writing onchain notes on Base mainnet.
 
 ---
 
 ## What is this?
 
-[MCP (Model Context Protocol)](https://modelcontextprotocol.io) is an open standard that lets AI clients like Claude Desktop and Cursor call external tools. This package exposes an MCP server that connects those AI clients to [Onchain Notes](https://onchain-notes.vercel.app) — a fully on-chain note-taking dApp deployed on Base mainnet.
+[MCP (Model Context Protocol)](https://modelcontextprotocol.io) is an open standard that lets AI clients like Claude Desktop and Cursor call external tools. This package exposes an MCP server that connects those clients to [Onchain Notes](https://onchain-notes.vercel.app) — a note-taking dApp deployed on Base mainnet.
 
-**Onchain Notes** stores your notes as permanent, verifiable records on the Base blockchain. No backend, no database, no central server — just your wallet and the chain.
-
-**Put together:** you open Claude, type `"Save a note about my project ideas"`, and the AI calls this MCP server, which signs and broadcasts a transaction to Base on your behalf. Your note is now on-chain.
+Notes are stored entirely on-chain. No backend, no database — just your wallet and the contract.
 
 ---
 
-## 🎬 Example Usage
+## Usage
 
-Once configured, try these prompts in Claude Desktop or Cursor:
+Once configured, you can use natural language in Claude Desktop or Cursor:
 
 ```
 Save a note titled "Meeting prep" about today's standup agenda.
@@ -45,23 +43,19 @@ How many notes do I have stored on-chain?
 
 ---
 
-## 📦 Installation
+## Installation
 
-### Option 1 — Run directly with npx (recommended)
+**Option 1 — npx (recommended)**
 
-No install required. Just add it to your MCP client config (see below) and it runs on demand:
+No install needed. Add it to your MCP config and it runs on demand.
 
-```bash
-npx onchain-notes-mcp
-```
-
-### Option 2 — Global install
+**Option 2 — Global install**
 
 ```bash
 npm install -g onchain-notes-mcp
 ```
 
-### Option 3 — Build from source
+**Option 3 — Build from source**
 
 ```bash
 git clone https://github.com/memosr/onchain-notes-mcp.git
@@ -73,16 +67,16 @@ PRIVATE_KEY=0x... node dist/index.js
 
 ---
 
-## ⚙️ Client Configuration
+## Configuration
 
 ### Claude Desktop
 
-Open your config file:
+Config file location:
 
 - **macOS**: `~/Library/Application Support/Claude/claude_desktop_config.json`
 - **Windows**: `%APPDATA%\Claude\claude_desktop_config.json`
 
-Add the following under `mcpServers`:
+Add under `mcpServers`:
 
 ```json
 {
@@ -98,11 +92,11 @@ Add the following under `mcpServers`:
 }
 ```
 
-Restart Claude Desktop — the onchain-notes tools will appear automatically.
+Restart Claude Desktop after saving.
 
 ### Cursor
 
-In your Cursor MCP config (`.cursor/mcp.json` or global MCP settings):
+In `.cursor/mcp.json` or your global MCP settings:
 
 ```json
 {
@@ -118,7 +112,7 @@ In your Cursor MCP config (`.cursor/mcp.json` or global MCP settings):
 }
 ```
 
-### Environment Variables
+### Environment variables
 
 | Variable | Required | Description |
 |---|---|---|
@@ -126,7 +120,7 @@ In your Cursor MCP config (`.cursor/mcp.json` or global MCP settings):
 
 ---
 
-## 🛠️ Available Tools
+## Available tools
 
 | Tool | Type | Description |
 |---|---|---|
@@ -136,7 +130,7 @@ In your Cursor MCP config (`.cursor/mcp.json` or global MCP settings):
 | `delete_note` | Write | Permanently remove a note by ID |
 | `get_note_count` | Read | Return the total number of your notes |
 
-### Tool Schemas
+### Schemas
 
 **`create_note`**
 ```json
@@ -176,48 +170,37 @@ Returns `{ count, message }`.
 
 ---
 
-## 🔐 Security
+## Security
 
-### Non-custodial design
+Your private key never leaves your machine. It's read from the `env` block in your local MCP config, used only to sign transactions locally via ethers.js, and never sent anywhere.
 
-Your private key **never leaves your machine**. It is read from the `env` block in your local MCP config file, used only to sign transactions locally via ethers.js, and never transmitted to any remote server or third party.
+A few things worth doing:
 
-### Best practices
-
-- **Never commit your private key** to version control.
-- Store it only in your local MCP config file, which should never be shared or checked in.
-- Use a **dedicated wallet** with a small ETH balance just for this MCP server — not your main wallet. A few dollars of ETH on Base covers hundreds of transactions.
+- Don't commit your private key to version control.
+- Use a dedicated wallet with a small ETH balance rather than your main wallet. A few dollars of ETH on Base covers hundreds of transactions.
 
 ```bash
 # Generate a fresh wallet with Foundry's cast
 cast wallet new
 ```
 
-Fund the new address with a small amount of ETH on Base for gas, then use only that key in the MCP config.
+Fund the new address with a small amount of ETH on Base for gas, then use that key in the config.
 
-### Builder Code attribution
-
-All write transactions include a builder code suffix appended to the calldata. This attributes usage to **memosr.base.eth** via the Onchain Notes builder registry and does not affect transaction behavior or your note data.
+All write transactions include a builder code suffix in the calldata. This attributes usage to **memosr.base.eth** via the Onchain Notes builder registry and doesn't affect transaction behavior or note data.
 
 ---
 
-## 🌐 About Base
+## Network details
 
-[Base](https://base.org) is an Ethereum L2 built by Coinbase. It offers fast, low-cost transactions with full EVM compatibility and Ethereum-grade security. Gas fees for note operations are typically a fraction of a cent.
-
-- **Network**: Base Mainnet
-- **Chain ID**: 8453
+- **Network**: Base Mainnet (Chain ID: 8453)
 - **Contract**: [`0xc9ccC404749895Cf45691897429e130E0a418200`](https://basescan.org/address/0xc9ccC404749895Cf45691897429e130E0a418200)
-- **RPC endpoints** (used automatically with fallback):
-  - `https://base.llamarpc.com`
-  - `https://base-rpc.publicnode.com`
-  - `https://mainnet.base.org`
+- **RPC** (used automatically with fallback): `base.llamarpc.com`, `base-rpc.publicnode.com`, `mainnet.base.org`
+
+Gas fees for note operations are typically a fraction of a cent.
 
 ---
 
-## 🤝 Contributing
-
-PRs are welcome. If you find a bug or want to request a feature, please [open an issue](https://github.com/memosr/onchain-notes-mcp/issues) with as much context as possible.
+## Contributing
 
 ```bash
 git clone https://github.com/memosr/onchain-notes-mcp.git
@@ -226,12 +209,14 @@ npm install
 npm run build
 ```
 
+Open an [issue](https://github.com/memosr/onchain-notes-mcp/issues) for bugs or feature requests.
+
 ---
 
-## 📝 License
+## License
 
 MIT — see [LICENSE](./LICENSE)
 
 ---
 
-Built with ❤️ by [memosr.base.eth](https://onchain-notes.vercel.app) · [Farcaster @memosr](https://warpcast.com/memosr) · [Live dApp](https://onchain-notes.vercel.app)
+Built by memosr.base.eth. Open to PRs and issues.
